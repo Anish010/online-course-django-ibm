@@ -146,16 +146,13 @@ def show_exam_result(request, course_id, submission_id):
     selected = Submission.objects.filter(id = submission_id).values_list('choices',flat = True)
 
     total_score = 0
-    grandTotal = 0
-    for choice in choices:
-        grandTotal += choice.question.grade
     for choice in choices:
         if choice.is_correct:
             total_score += choice.question.grade
-    final_score = (total_score / grandTotal) * 100
+
     context['selected'] = selected
     context['course'] = course
     context['choices'] = choices
-    context['grade'] = final_score
+    context['grade'] = total_score
 
     return render(request, 'onlinecourse/exam_result_bootstrap.html', context)
